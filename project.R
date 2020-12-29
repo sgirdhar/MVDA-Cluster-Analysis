@@ -123,6 +123,9 @@ rect.hclust(fit3, k = 5, border = "red")
 
 
 ################## Cluster Analaysis - k means ####################
+# removal of main_meal
+# diet = diet[,-15]
+# diet = diet[,-15]
 
 library(cluster)
 
