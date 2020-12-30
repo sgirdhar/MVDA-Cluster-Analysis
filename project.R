@@ -84,6 +84,14 @@ diet$meals_per_day = as.factor(diet$meals_per_day)
 diet$geneder = as.factor(diet$geneder)
 # typeof(diet$geneder)
 
+# BMI calculation 
+bmi = seq(0, 0, length.out = nrow(diet))
+bmi = diet$weight / ((diet$height / 100) ^ 2)
+diet$bmi = bmi
+
+# Let's create logical groups
+
+
 ################## Cluster Analaysis - Hierarchical ####################
 
 # Ward hierarchical clustering
@@ -144,3 +152,32 @@ library(g)
 color =  c("red", "blue", "green", "black")
 clus4 = cutree(diet, 4)
 plot(as.phylo(diet), type = "fan",  tip.color = colors[clus4], label.offset = 1, cex = 0.7)
+
+
+############# k means for group1 ###############
+
+# group1 => sweets, weight
+group1 = cbind(diet$sweets, diet$weight)
+group1_kmeans_clust = kmeans(group1, 4)
+clusplot(group1, group1_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+############# k means for group2 ###############
+
+#group2 => alcohol, region1, region2
+set.seed(38)
+group2 = cbind(diet$alcohol, diet$region1, diet$region2)
+group2_kmeans_clust = kmeans(group2, 3)
+clusplot(group2, group2_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+############# k means for group3 ###############
+
+#group2 => meals_per_day, bmi
+
+group3 = cbind(diet$meals_per_day, diet$bmi)
+group3_kmeans_clust = kmeans(group3, 5)
+clusplot(group3, group3_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+
+wcss = vector()
+for (i in 1:20) wcss[i] = sum(kmeans(group3, i)$withinss)
+plot(1:20, wcss, type = 'b', main = paste('The Elbow Method'), xlab = 'Number of clusters', ylab = 'WCSS')
+
