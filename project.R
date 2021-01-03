@@ -89,14 +89,12 @@ bmi = seq(0, 0, length.out = nrow(diet))
 bmi = diet$weight / ((diet$height / 100) ^ 2)
 diet$bmi = bmi
 
-# Let's create logical groups
-
 
 ################## Cluster Analaysis - Hierarchical ####################
 
 # Ward hierarchical clustering
 
-d = dist(diet, method = "euclidean")
+d = dist(diet, method = "minkowski")
 fit = hclust(d, method = "ward")
 plot(fit)
 groups = cutree(fit, k = 5)
@@ -105,7 +103,7 @@ rect.hclust(fit, k = 5, border = "red")
 
 # Avg hierarchical clustering
 
-d1 = dist(diet, method = "euclidean")
+d1 = dist(diet, method = "minkowski")
 fit1 = hclust(d1, method = "average")
 plot(fit1)
 groups1 = cutree(fit1, k = 5)
@@ -114,7 +112,7 @@ rect.hclust(fit1, k = 5, border = "red")
 
 # Complete hierarchical clustering
 
-d2 = dist(diet, method = "euclidean")
+d2 = dist(diet, method = "minkowski")
 fit2 = hclust(d2, method = "complete")
 plot(fit2)
 groups2 = cutree(fit2, k = 5)
@@ -123,7 +121,7 @@ rect.hclust(fit2, k = 5, border = "red")
 
 # Single hierarchical clustering
 
-d3 = dist(diet, method = "euclidean")
+d3 = dist(diet, method = "minkowski")
 fit3 = hclust(d3, method = "single")
 plot(fit3)
 groups3 = cutree(fit3, k = 5)
@@ -154,14 +152,74 @@ clus4 = cutree(diet, 4)
 plot(as.phylo(diet), type = "fan",  tip.color = colors[clus4], label.offset = 1, cex = 0.7)
 
 
-############# k means for group1 ###############
 
-# group1 => sweets, weight
+############# cluster analysis for group1 => sweets, weight ###############
+
 group1 = cbind(diet$sweets, diet$weight)
-group1_kmeans_clust = kmeans(group1, 4)
-clusplot(group1, group1_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
 
-############# k means for group2 ###############
+####### kmeans
+
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss_group1 = vector()
+for (i in 1:10) wcss_group1[i] = sum(kmeans(group1, i)$withinss)
+plot(1:10,
+     wcss_group1,
+     type = 'b',
+     main = paste('The Elbow Method'),
+     xlab = 'Number of clusters',
+     ylab = 'WCSS')
+
+# Fitting K-Means to the group1
+set.seed(29)
+kmeans_group1 = kmeans(x = group1, centers = 2)
+y_kmeans_group1 = kmeans_group1$cluster
+
+# Visualising the clusters
+library(cluster)
+clusplot(group1,
+         y_kmeans_group1,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of people eating sweets no. of days in a week vs their weight'),
+         xlab = 'Sweets',
+         ylab = 'Weight')
+
+####### Hierarchical
+
+# Using the dendrogram to find the optimal number of clusters
+dendrogram_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D')
+plot(dendrogram_group1,
+     main = paste('Dendrogram of group1'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the group1
+hc_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D')
+y_hc_group1 = cutree(hc_group1, 2)
+rect.hclust(hc_group1, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(group1,
+         y_hc_group1,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of people eating sweets no. of day in a week vs their weight'),
+         xlab = 'Sweets',
+         ylab = 'Weight')
+
+
+
+############# cluster analysis for group2 => sweets, weight ###############
 
 #group2 => alcohol, region1, region2
 set.seed(38)
@@ -169,11 +227,12 @@ group2 = cbind(diet$alcohol, diet$region1, diet$region2)
 group2_kmeans_clust = kmeans(group2, 3)
 clusplot(group2, group2_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
 
-############# k means for group3 ###############
 
-#group2 => meals_per_day, bmi
+
+############# cluster analysis for group3 => meals_per_day, bmi ###############
 
 group3 = cbind(diet$meals_per_day, diet$bmi)
+
 group3_kmeans_clust = kmeans(group3, 5)
 clusplot(group3, group3_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
 
