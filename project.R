@@ -56,6 +56,7 @@ diet$region2 = region2
 diet$geneder = as.character(diet$geneder)
 diet$geneder = replace(diet$geneder, diet$geneder == 'Male', '0')
 diet$geneder = replace(diet$geneder, diet$geneder == 'Female' , '1')
+diet$geneder = as.factor(diet$geneder)
 
 # diet$geneder[is.na(diet$geneder)] = 0
 
@@ -219,13 +220,69 @@ clusplot(group1,
 
 
 
-############# cluster analysis for group2 => sweets, weight ###############
+############# cluster analysis for group2 => gender, bmi ###############
 
-#group2 => alcohol, region1, region2
-set.seed(38)
-group2 = cbind(diet$alcohol, diet$region1, diet$region2)
-group2_kmeans_clust = kmeans(group2, 3)
-clusplot(group2, group2_kmeans_clust$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
+group2 = cbind(diet$geneder, diet$bmi)
+
+####### kmeans
+
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss_group2 = vector()
+for (i in 1:10) wcss_group2[i] = sum(kmeans(group2, i)$withinss)
+plot(1:10,
+     wcss_group2,
+     type = 'b',
+     main = paste('The Elbow Method'),
+     xlab = 'Number of clusters',
+     ylab = 'WCSS')
+
+# Fitting K-Means to the group1
+set.seed(29)
+kmeans_group2 = kmeans(x = group2, centers = 2)
+y_kmeans_group2 = kmeans_group2$cluster
+
+# Visualising the clusters
+library(cluster)
+clusplot(group2,
+         y_kmeans_group2,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of gender vs bmi'),
+         xlab = 'Gender',
+         ylab = 'Weight')
+
+####### Hierarchical
+
+# Using the dendrogram to find the optimal number of clusters
+dendrogram_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D')
+plot(dendrogram_group2,
+     main = paste('Dendrogram of group2'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the group1
+hc_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D')
+y_hc_group2 = cutree(hc_group2, 2)
+rect.hclust(hc_group2, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(group2,
+         y_hc_group2,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of gender vs bmi'),
+         xlab = 'Gender',
+         ylab = 'BMI')
 
 
 
