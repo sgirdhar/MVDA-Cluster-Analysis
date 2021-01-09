@@ -93,40 +93,210 @@ diet$bmi = bmi
 
 ################## Cluster Analaysis - Hierarchical ####################
 
+# Here the analysis has been done with distance methpd 'euclidean'
+
 # Ward hierarchical clustering
 
-d = dist(diet, method = "minkowski")
-fit = hclust(d, method = "ward")
-plot(fit)
-groups = cutree(fit, k = 5)
-rect.hclust(fit, k = 5, border = "red")
+# Using the dendrogram to find the optimal number of clusters
+dendrogram = hclust(d = dist(diet, method = 'euclidean'), method = 'ward.D2')
+plot(dendrogram,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc = hclust(d = dist(diet, method = 'euclidean'), method = 'ward.D2')
+y_hc = cutree(hc, 2)
+rect.hclust(hc, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
 
 
 # Avg hierarchical clustering
 
-d1 = dist(diet, method = "minkowski")
-fit1 = hclust(d1, method = "average")
-plot(fit1)
-groups1 = cutree(fit1, k = 5)
-rect.hclust(fit1, k = 5, border = "red")
+dendrogram_avg = hclust(d = dist(diet, method = 'euclidean'), method = 'average')
+plot(dendrogram_avg,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_avg = hclust(d = dist(diet, method = 'euclidean'), method = 'average')
+y_hc_avg = cutree(hc_avg, 2)
+rect.hclust(hc_avg, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_avg,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
 
 
 # Complete hierarchical clustering
 
-d2 = dist(diet, method = "minkowski")
-fit2 = hclust(d2, method = "complete")
-plot(fit2)
-groups2 = cutree(fit2, k = 5)
-rect.hclust(fit2, k = 5, border = "red")
+dendrogram_max = hclust(d = dist(diet, method = 'euclidean'), method = 'complete')
+plot(dendrogram_max,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_max = hclust(d = dist(diet, method = 'euclidean'), method = 'complete')
+y_hc_max = cutree(hc_max, 3)
+rect.hclust(hc_max, k = 3, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_max,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
 
 
 # Single hierarchical clustering
 
-d3 = dist(diet, method = "minkowski")
-fit3 = hclust(d3, method = "single")
-plot(fit3)
-groups3 = cutree(fit3, k = 5)
-rect.hclust(fit3, k = 5, border = "red")
+dendrogram_min = hclust(d = dist(diet, method = 'euclidean'), method = 'single')
+plot(dendrogram_min,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_min = hclust(d = dist(diet, method = 'euclidean'), method = 'single')
+y_hc_min = cutree(hc_min, 2)
+rect.hclust(hc_min, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_min,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
+
+
+# Here the analysis has been done with distance methpd 'minkowski'
+
+# Ward hierarchical clustering
+
+# Using the dendrogram to find the optimal number of clusters
+dendrogram = hclust(d = dist(diet, method = 'minkowski'), method = 'ward.D2')
+plot(dendrogram,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc = hclust(d = dist(diet, method = 'minkowski'), method = 'ward.D2')
+y_hc = cutree(hc, 2)
+rect.hclust(hc, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
+
+
+# Avg hierarchical clustering
+
+dendrogram_avg = hclust(d = dist(diet, method = 'minkowski'), method = 'average')
+plot(dendrogram_avg,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_avg = hclust(d = dist(diet, method = 'minkowski'), method = 'average')
+y_hc_avg = cutree(hc_avg, 2)
+rect.hclust(hc_avg, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_avg,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
+
+
+# Complete hierarchical clustering
+
+dendrogram_max = hclust(d = dist(diet, method = 'minkowski'), method = 'complete')
+plot(dendrogram_max,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_max = hclust(d = dist(diet, method = 'minkowski'), method = 'complete')
+y_hc_max = cutree(hc_max, 3)
+rect.hclust(hc_max, k = 3, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_max,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
+
+
+# Single hierarchical clustering
+
+dendrogram_min = hclust(d = dist(diet, method = 'minkowski'), method = 'single')
+plot(dendrogram_min,
+     main = paste('Dendrogram of diet'),
+     xlab = 'User',
+     ylab = 'Euclidean distances')
+
+# Fitting Hierarchical Clustering to the diet
+hc_min = hclust(d = dist(diet, method = 'minkowski'), method = 'single')
+y_hc_min = cutree(hc_min, 2)
+rect.hclust(hc_min, k = 2, border = "red")
+
+# Visualising the clusters
+library(cluster)
+clusplot(diet,
+         y_hc_min,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels= 2,
+         plotchar = FALSE,
+         span = TRUE)
 
 
 ################## Cluster Analaysis - k means ####################
@@ -134,23 +304,33 @@ rect.hclust(fit3, k = 5, border = "red")
 # diet = diet[,-15]
 # diet = diet[,-15]
 
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss = vector()
+for (i in 1:10) wcss[i] = sum(kmeans(diet, i)$withinss)
+plot(1:10,
+     wcss,
+     type = 'b',
+     main = paste('The Elbow Method'),
+     xlab = 'Number of clusters',
+     ylab = 'WCSS')
+
+# Fitting K-Means to the diet
+set.seed(29)
+kmeans = kmeans(x = diet, centers = 2)
+y_kmeans = kmeans$cluster
+
+# Visualising the clusters
 library(cluster)
-
-# K-means clustering with 3 clusters
-fit4 = kmeans(diet, 3)
-fit4
-clusplot(diet, fit4$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
-
-fit5 = kmeans(diet, 2)
-fit5
-clusplot(diet, fit5$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0)
-
-library(ggplot2)
-library(g)
-
-color =  c("red", "blue", "green", "black")
-clus4 = cutree(diet, 4)
-plot(as.phylo(diet), type = "fan",  tip.color = colors[clus4], label.offset = 1, cex = 0.7)
+clusplot(diet,
+         y_kmeans,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Clusters of all people'))
 
 
 
@@ -193,14 +373,14 @@ clusplot(group1,
 ####### Hierarchical
 
 # Using the dendrogram to find the optimal number of clusters
-dendrogram_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D')
+dendrogram_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D2')
 plot(dendrogram_group1,
      main = paste('Dendrogram of group1'),
      xlab = 'User',
      ylab = 'Euclidean distances')
 
 # Fitting Hierarchical Clustering to the group1
-hc_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D')
+hc_group1 = hclust(d = dist(group1, method = 'euclidean'), method = 'ward.D2')
 y_hc_group1 = cutree(hc_group1, 2)
 rect.hclust(hc_group1, k = 2, border = "red")
 
@@ -259,14 +439,14 @@ clusplot(group2,
 ####### Hierarchical
 
 # Using the dendrogram to find the optimal number of clusters
-dendrogram_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D')
+dendrogram_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D2')
 plot(dendrogram_group2,
      main = paste('Dendrogram of group2'),
      xlab = 'User',
      ylab = 'Euclidean distances')
 
 # Fitting Hierarchical Clustering to the group1
-hc_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D')
+hc_group2 = hclust(d = dist(group2, method = 'euclidean'), method = 'ward.D2')
 y_hc_group2 = cutree(hc_group2, 2)
 rect.hclust(hc_group2, k = 2, border = "red")
 
